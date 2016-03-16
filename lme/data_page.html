@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-us"><head><meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Playlist Dataset</title>
+  <meta content="Shuo Chen" name="author">
+</head><body>
+<div style="text-align: center; height: 239px;"><b><span style="font-size: 20pt;"><br>
+Playlist Dataset<br>
+<br>
+</span></b>
+<div style="text-align: left;"><span style="font-weight: bold;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  <br>
+</span>
+<table style="text-align: left; width: 893px; margin-left: auto; margin-right: auto; height: 278px;" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;"><b><span style="font-size: 20pt;"><br>
+</span></b>
+      <div style="text-align: left;">
+<ul><li><span style="font-weight: bold;">Overview</span></li></ul>
+      </div>
+
+      <br>
+      <div style="margin-left: 40px;">This datasets are collected by Shuo Chen (<a href="mailto:shuochen@cs.cornell.edu">shuochen@cs.cornell.edu</a>) from
+Dept. of Computer Science, Cornell University. The playlists and tag
+data are respectively crawled from Yes.com and Last.fm. Thus we do not
+own these data. Please contact Yes.com and Last.fm for any commercial
+use.<br>
+      <br>
+
+Yes.com is a website that provides radio playlists from hundreds of
+radio stations in the United States. By using the web based API
+      <a href="http://api.yes.com">http://api.yes.com</a>, one can retrieve the playlist record of a specified
+station for the last 7 days. We collected as many playlists as possible
+by specifying all possible genres and getting playlists from all
+possible stations. The collection lasted from December 2010 to May
+2011. This lead to a dataset of 75,262 songs and 2,840,553 transitions.
+To get datasets of various sizes, we pruned the raw data so that only
+the songs with a number of appearances above a certain threshold are
+kept. We then divide the pruned set into a training set and a testing
+set, making sure that each song has appeared at least once in the
+training set. We name them as <span style="font-style: italic;">yes_small</span>, <span style="font-style: italic;">yes_big</span> and <span style="font-style: italic;">yes_complete</span>,
+whose basic statistics are shown below.<br>
+      <br>
+      <table style="text-align: left; width: 674px; height: 124px;" border="1" cellpadding="2" cellspacing="0">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top;"><br>
+            </td>
+            <td style="vertical-align: top;"><span style="font-style: italic;">yes_small</span><br>
+            </td>
+            <td style="vertical-align: top;"><span style="font-style: italic;">yes_big</span><br>
+            </td>
+            <td style="vertical-align: top;"><span style="font-style: italic;">yes_complete</span><br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">Appearance Threshold<br>
+            </td>
+            <td style="vertical-align: top;">20<br>
+            </td>
+            <td style="vertical-align: top;">5<br>
+            </td>
+            <td style="vertical-align: top;">0<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">Number of Songs</td>
+            <td style="vertical-align: top;">3,168</td>
+            <td style="vertical-align: top;">9,775</td>
+            <td style="vertical-align: top;">75,262</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">Number of Train Transitions</td>
+            <td style="vertical-align: top;">134,431</td>
+            <td style="vertical-align: top;">172,510</td>
+            <td style="vertical-align: top;">1,542,372</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">Number of Test Transitions</td>
+            <td style="vertical-align: top;">1,191,279</td>
+            <td style="vertical-align: top;">1,602,079</td>
+            <td style="vertical-align: top;">1,298,181</td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <br>
+Last.fm provides tag information for
+songs, artists and albums that is contributed by its millions of users.
+For each of the songs in our playlists dataset, we query the Last.fm
+API <a href="http://www.last.fm/api">http://www.last.fm/api</a> for the name of the artist and the song,
+retrieving the top tags.&nbsp; We then prune the tag set by only keeping the
+top 250 tags with the most appearances across songs. Note that Last.fm
+did not provide any tags for about 20% of songs.<br>
+      <br>
+
+Please see the references for more details about our work. Also, our
+software Logistic Markov Embedding (LME) and Multispace Logistic Markov
+Embedding (Multi-LME) which directly learns on these datasets can be
+downloaded at <a href="http://lme.joachims.org">here</a>. (Note that LME is not efficient
+enough to handle <span style="font-style: italic;">yes_complete</span>).<br>
+      <br>
+      <br>
+      </div>
+      <ul style="font-weight: bold;">
+        <li>Download</li>
+      </ul>
+      <div style="margin-left: 40px;">You can get the dataset from <a href="dataset.tar.gz">here</a>.<br>
+      <br>
+      <br>
+      </div>
+      <ul style="font-weight: bold;">
+        <li>Format</li>
+      </ul>
+      <div style="margin-left: 40px;">All of the folders contain the following files:<br>
+      <table style="text-align: left; width: 598px; height: 65px;" border="1" cellpadding="2" cellspacing="0">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top;">train.txt<br>
+            </td>
+            <td style="vertical-align: top;">Training playlists, using integer ID to represent songs</td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">test.txt<br>
+            </td>
+            <td style="vertical-align: top;">Testing playlists, using integer ID to represent songs<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">tags.txt<br>
+            </td>
+            <td style="vertical-align: top;">Social tags, using integer ID to represent songs<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">song_hash.txt<br>
+            </td>
+            <td style="vertical-align: top;">Mapping from integer ID to song's title and artist<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">tag_hash.txt<br>
+            </td>
+            <td style="vertical-align: top;">Mapping from integer ID to tag's name<br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+Format of the playlist data:<br>
+The first line of the data file is the IDs (not the integer ID, but IDs
+from other sources for identifying the songs) for the songs, separated
+by a space. The second line are the number of appearances of each song
+in the file, also separated by a space. Starting from the third line
+are the playlists, with each song represented by its integer ID in this
+file (from 0 to the total number of songs minus one). Note that in the
+playlist data file, each line is ended with a space.<br>
+      <br>
+Format of the tag data:<br>
+The tag data file has the same number of lines as the total number of
+songs in the playlist data. Each line is the tags for a song,
+represented by integers from 0 to the total number of tags minus one
+and separated by space. If a song does not have any tag, its line is
+just a '#'. Note that for the tag file, there is no space at the end of
+each line.<br>
+      <br>
+Format of the song mapping file:<br>
+Each line corresponds to one song, and has the format<br>
+      <span style="font-family: Helvetica,Arial,sans-serif;">Integer_ID \t Title \t Artist \n</span><br>
+(The spaces here are only for making it easy to read. They do not exist in the real data file.)<br>
+      <br>
+Format of the tag mapping file:<br>
+Each line corresponds to one song, and has the format<br>
+      <span style="font-family: Helvetica,Arial,sans-serif;">Integer_ID, Name\n</span><br>
+      <br>
+      <br>
+      </div>
+      <ul style="font-weight: bold;">
+        <li>References</li>
+      </ul>
+      <div style="margin-left: 40px;">If you use the datasets, please cite the following papers:<br>
+      <br>
+[1] Shuo Chen, Joshua L. Moore, Douglas Turnbull, Thorsten Joachims,
+Playlist Prediction via Metric Embedding, ACM Conference on Knowledge
+Discovery and Data Mining (KDD), 2012.<br>
+      <br>
+[2] Joshua L. Moore, Shuo Chen, Thorsten Joachims, Douglas Turnbull,
+Learning to Embed Songs and Tags for Playlists Prediction,
+International Society for Music Information Retrieval (ISMIR), 2012.<br>
+      <br>
+[3] Shuo Chen, Jiexun Xu, Thorsten Joachims, Multi-space Probabilistic
+Sequence Modeling, ACM Conference on Knowledge Discovery and Data
+Mining (KDD), 2013.<br>
+      <br>
+      <br>
+      </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</body></html>

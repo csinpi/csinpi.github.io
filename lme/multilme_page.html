@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en-us"><head>
+
+<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>Playlist Dataset</title>
+  <meta content="Shuo Chen" name="author"></head><body>
+<div style="text-align: center; height: 239px;"><b><span style="font-size: 20pt;"><br>
+Multi-space Logistic Markov Embedding<br>
+<br>
+</span></b>
+<div style="text-align: left;"><span style="font-weight: bold;">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  <br>
+</span>
+<table style="text-align: left; width: 893px; margin-left: auto; margin-right: auto; height: 278px;" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;"><b><span style="font-size: 20pt;"><br>
+</span></b>
+      <div style="text-align: left;">
+<ul><li><span style="font-weight: bold;">Overview</span></li></ul>
+      </div>
+
+      <br>
+<div style="margin-left: 40px;">Multi-space Logistic Markov Embedding (Multi-LME) is a software developed by Shuo Chen (<a href="mailto:shuochen@cs.cornell.edu">shuochen@cs.cornell.edu</a>)
+from Dept. of Computer Science, Cornell University. It learns from
+sequence data to embed the elements that constitute the sequences into
+multiple spaces. We originally used it in music playlists modeling.
+Please see the references for more details. This program is granted
+free of charge for research and education purposes. However you must
+obtain a license from the authors to use it for commercial purposes.
+Since it is free, there is no warranty for it.<br>
+<br>
+      </div>
+      <ul style="font-weight: bold;">
+        <li>Download</li>
+      </ul>
+      <div style="margin-left: 40px;">You can get the code from <a href="multi_lme.tar.gz">here</a>.<br>
+<br>
+      </div>
+      <ul style="font-weight: bold;">
+        <li>Build<br>
+</li>
+      </ul>
+      <div style="margin-left: 40px;">The software is
+implemented in C with the support of Open MPI 1.6. A Makefile that uses
+gcc and mpicc compilers is also included. To build the software, a
+simple "make" in the same directory as the source files will do. It
+creates three binaries MLogisticEmbed, MLogisticEmbed_MPI and
+MLogisticPred in the same directory. The building has been tested on
+various systems including GNU/Linux 2.6.9, 2.6.32, 2.6.18, 3.2.0 and
+Mac OS X Mountain Lion.<br>
+      <br>
+</div>
+      <ul>
+        <li><span style="font-weight: bold;">Usage</span></li>
+      </ul>
+      <div style="margin-left: 40px;">MLogisticEmbed and
+MLogisticEmbed_MPI take a training playlist dataset as input and
+produces a multi-space embedding/model file for the songs.
+MLogisticPred takes a testing playlist dataset and an embedding/model
+file as input and print to stdout the average log-likelihood on the
+test set.<br>
+      <br>
+Format of the playlist data:<br>
+The first line of the data file is the IDs for the songs, separated by
+a space. The second line are the number of appearances of each song in
+the file, also separated by a space. In fact these two lines are not
+essential in the program, you can replace it with any integer
+placeholders. Starting from the third line are the playlists, with each
+song represented by its integer ID in this file (from 0 to the total
+number of songs minus one). Note that in the playlist data file, each
+line is ended with a space.<br>
+      <br>
+We provide sample files, which are the datasets we used for our papers. You can download them at http://lme.joachims.org.<br>
+      <br>
+Training:<br>
+      <br>
+MLogisticEmbed is used in the following format for training with single
+process (sequentially solving each embedding in different spaces):<br>
+      <br>
+&nbsp;&nbsp;&nbsp; <span style="font-family: Helvetica,Arial,sans-serif;">MLogisticEmbed [options] training_file model_file</span><br>
+      <br>
+where training_file is the input training playlist set, model_file is the model to output.<br>
+      <br>
+Similarly, MLogisticEmbed_MPI is used for training embeddings in
+different spaces in parallel. To run it with mult-core setting, one can
+use<br>
+      <br>
+&nbsp;&nbsp;&nbsp; <span style="font-family: Helvetica,Arial,sans-serif;">mpirun -np x MLogisticEmbed_MPI [options] training_file model_file</span><br>
+      <br>
+where x is the number of processes you want to launch. Usually it
+should be no more than the number of cores your CPU has. When running
+in a distributed environment, one needs to support with a host file:<br>
+      <br>
+&nbsp;&nbsp;&nbsp; <span style="font-family: Helvetica,Arial,sans-serif;">mpirun -np x --hostfile myhostfile MLogisticEmbed_MPI [options] training_file model_file</span><br>
+      <br>
+where myhostfile may look like:<br>
+      <br>
+machine-0 slots=2 max-slots=2<br>
+machine-1 slots=2 max-slots=2<br>
+machine-2 slots=2 max-slots=2<br>
+......<br>
+      <br>
+It specifies what machines can be used and how many processes can each
+of them host. For more details, please refer to the manual of Open MPI.<br>
+      <br>
+Available options are:<br>
+      <br>
+      <table style="text-align: left; width: 736px; height: 446px;" border="1" cellpadding="2" cellspacing="0">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top; width: 50px;">-d<br>
+            </td>
+            <td style="vertical-align: top; width: 50px;">float<br>
+            </td>
+            <td style="vertical-align: top;">Dimensionality of the embedding (default 2)<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">-i<br>
+            </td>
+            <td style="vertical-align: top;">float<br>
+            </td>
+            <td style="vertical-align: top;">Learning rate (default 10.0)<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">-e<br>
+            </td>
+            <td style="vertical-align: top;">float<br>
+            </td>
+            <td style="vertical-align: top;">Error allowed for termination (default 0.00001)<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">-w<br>
+            </td>
+            <td style="vertical-align: top;">int<br>
+            </td>
+            <td style="vertical-align: top;">Number of last few iterations that the program tracks to determine termination&nbsp; (default 10)<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">-a<br>
+            </td>
+            <td style="vertical-align: top;">float<br>
+            </td>
+            <td style="vertical-align: top;">Adaptively increase the
+learning rate by this number if the improvement of the training
+likelihood is less than 0.005 (default 1.1)<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">-b<br>
+            </td>
+            <td style="vertical-align: top;">float<br>
+            </td>
+            <td style="vertical-align: top;">Adaptively decrease the learning rate by this number if the training likelihood deteriorates (default 2.0)<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">-p<br>
+            </td>
+            <td style="vertical-align: top;">[0, 1]<br>
+            </td>
+            <td style="vertical-align: top;">Whether to enable the popularity term (default 1, see [3] for more details)<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">-K<br>
+            </td>
+            <td style="vertical-align: top;">int<br>
+            </td>
+            <td style="vertical-align: top;">Number of spaces/clusters
+to divide the songs into (default 1). When running with MPI, please
+make sure it is no less than number of processes you want to launch.<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">-C<br>
+            </td>
+            <td style="vertical-align: top;">string<br>
+            </td>
+            <td style="vertical-align: top;">The file name of a
+preclustering file produced by other software. If this option is
+missing, the program uses the built-in preclustering method, with
+number of clusters specified by -K flag. If it is provided, the program
+uses the result in the file. The file should contain one line of
+integers separated by spaces. The number of integers should equal the
+number of songs in the training file. The integers specify which
+cluster the songs belong to. They range from 0 to number of clusters
+minus one. When using this preclustering file, please also make sure
+that the number of clusters is no less than the number of precosses you
+want to launch.<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">-G<br>
+            </td>
+            <td style="vertical-align: top;">float<br>
+            </td>
+            <td style="vertical-align: top;">The percentage of songs
+used as internal songs in the built-in preclustering method (default
+0.08). Note that is has no effect when -C is used.<br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+Testing:<br>
+      <br>
+Testing only runs with a single process. It is simply as<br>
+      <br>
+&nbsp;&nbsp;&nbsp; <span style="font-family: Helvetica,Arial,sans-serif;">MLogisticPred testing_file model_file</span><br>
+      <br>
+where testing_file is the input testing playlist set, model_file is the model obtained from training.<br>
+      <br>
+      </div>
+      <ul>
+        <li><span style="font-weight: bold;">Visualization</span></li>
+      </ul>
+      <div style="margin-left: 40px;">We also provide a simple python script plot.py to visualize the embeddings with portals in multiple spaces. The usage is:<br>
+      <br>
+      <span style="font-family: Helvetica,Arial,sans-serif;">python plot.py model_file</span><br>
+      <br>
+Note that one needs to install Numpy and Matplotlib in order to run the script.<br>
+      <br>
+      </div>
+      <br>
+      <ul>
+<li><span style="font-weight: bold;">Example</span><br>
+</li>
+      </ul>
+
+      <div style="margin-left: 40px;">The following three command lines
+show how to launch 4 processes in MPI to training a 2-dimensional model
+with 10 spaces/clusters, then test for average log-likelihood on the
+test set, finally visualize the trained model:<br>
+      <br>
+      <span style="font-family: Helvetica,Arial,sans-serif;">mpirun -np 4 MLogisticEmbed_MPI -d 2 -K 10 train.txt model.ebd</span><br style="font-family: Helvetica,Arial,sans-serif;">
+      <span style="font-family: Helvetica,Arial,sans-serif;">MLogisticPred test.txt model.ebd</span><br style="font-family: Helvetica,Arial,sans-serif;">
+      <span style="font-family: Helvetica,Arial,sans-serif;">python plot.py model.ebd</span><br>
+      <br>
+      </div>
+      <br>
+      <ul>
+<li><span style="font-weight: bold;">Bug Report</span><br>
+</li>
+      </ul>
+
+      <div style="margin-left: 40px;">Please contact the author if you spot any bug in the software.<br>
+<br>
+      </div>
+
+
+
+
+      
+      <ul style="font-weight: bold;">
+        <li>References</li>
+      </ul>
+      <div style="margin-left: 40px;">If you use the datasets, please cite the following papers:<br>
+      <br>
+[1] Shuo Chen, Joshua L. Moore, Douglas Turnbull, Thorsten Joachims,
+Playlist Prediction via Metric Embedding, ACM Conference on Knowledge
+Discovery and Data Mining (KDD), 2012.<br>
+      <br>
+[2] Joshua L. Moore, Shuo Chen, Thorsten Joachims, Douglas Turnbull,
+Learning to Embed Songs and Tags for Playlists Prediction,
+International Society for Music Information Retrieval (ISMIR), 2012.<br>
+      <br>
+[3] Shuo Chen, Jiexun Xu, Thorsten Joachims, Multi-space Probabilistic
+Sequence Modeling, ACM Conference on Knowledge Discovery and Data
+Mining (KDD), 2013.<br>
+      <br>
+      <br>
+      </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</body></html>
